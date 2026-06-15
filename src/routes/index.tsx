@@ -3,6 +3,8 @@ import { WinkMark } from "@/components/WinkMark";
 
 const REPO = "https://github.com/myhackingpal/myhackingpal";
 const RELEASES = "https://github.com/myhackingpal/myhackingpal/releases/latest";
+const DL = (asset: string) => `${RELEASES}/download/${asset}`;
+const DOCKER_COMPOSE = "https://raw.githubusercontent.com/myhackingpal/myhackingpal/main/docker-compose.yml";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,18 +64,24 @@ const downloads = [
     platform: "macOS",
     arch: "Apple Silicon",
     file: "MyHackingPal-macos-arm64.dmg",
+    url: DL("MyHackingPal-macos-arm64.dmg"),
+    cta: "↓ Download .dmg",
     note: "Mount, drag to /Applications. Right-click → Open on first launch.",
   },
   {
     platform: "Linux",
     arch: "x86_64",
     file: "MyHackingPal-linux-x86_64.AppImage",
+    url: DL("MyHackingPal-linux-x86_64.AppImage"),
+    cta: "↓ Download .AppImage",
     note: "chmod +x, then run. Per-commit arm64 builds in Actions.",
   },
   {
     platform: "Docker",
     arch: "backend API",
     file: "docker compose up -d",
+    url: DOCKER_COMPOSE,
+    cta: "↓ Download docker-compose.yml",
     note: "Headless FastAPI sidecar. NET_RAW + NET_ADMIN for raw scans.",
   },
 ];
@@ -108,9 +116,7 @@ function Nav() {
           <a href="#download" className="hover:text-foreground transition">Download</a>
         </nav>
         <a
-          href={RELEASES}
-          target="_blank"
-          rel="noreferrer"
+          href="#download"
           className="text-xs tracking-widest uppercase px-3 py-1.5 border border-terminal text-terminal hover:bg-terminal hover:text-accent-foreground transition"
         >
           ./download
@@ -154,9 +160,7 @@ function Hero() {
 
             <div className="mt-10 flex flex-wrap gap-3 fade-up">
               <a
-                href={RELEASES}
-                target="_blank"
-                rel="noreferrer"
+                href="#download"
                 className="group inline-flex items-center gap-3 px-5 py-3 bg-terminal text-accent-foreground font-semibold tracking-wide hover:ring-terminal transition"
               >
                 <span className="text-base">↓</span>
@@ -350,12 +354,12 @@ function Download() {
               </div>
               <p className="mt-4 text-sm text-muted-foreground font-sans flex-1">{d.note}</p>
               <a
-                href={RELEASES}
-                target="_blank"
+                href={d.url}
+                download={d.file}
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-terminal text-accent-foreground font-semibold tracking-wide hover:opacity-90 transition"
               >
-                ↓ Download
+                {d.cta}
               </a>
             </div>
           ))}
