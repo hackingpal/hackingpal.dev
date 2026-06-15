@@ -1,0 +1,127 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-terminal: var(--terminal);
+  --color-terminal-glow: var(--terminal-glow);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* Brand: terminal — near-black bg, paper-white fg, single phosphor-green accent */
+  --background: oklch(0.13 0.005 240);
+  --foreground: oklch(0.97 0.002 240);
+  --card: oklch(0.17 0.006 240);
+  --card-foreground: oklch(0.97 0.002 240);
+  --popover: oklch(0.17 0.006 240);
+  --popover-foreground: oklch(0.97 0.002 240);
+  --primary: oklch(0.97 0.002 240);
+  --primary-foreground: oklch(0.13 0.005 240);
+  --secondary: oklch(0.22 0.006 240);
+  --secondary-foreground: oklch(0.97 0.002 240);
+  --muted: oklch(0.20 0.006 240);
+  --muted-foreground: oklch(0.65 0.01 240);
+  --accent: oklch(0.85 0.18 145);
+  --accent-foreground: oklch(0.13 0.005 240);
+  --terminal: oklch(0.85 0.18 145);
+  --terminal-glow: oklch(0.85 0.18 145 / 0.35);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.97 0.002 240);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.85 0.18 145 / 0.5);
+}
+
+.dark { color-scheme: dark; }
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { background-color: var(--color-background); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--terminal);
+    color: var(--primary-foreground);
+  }
+}
+
+@layer utilities {
+  .font-mono { font-family: var(--font-mono); }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .bg-scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      oklch(1 0 0 / 0.02) 2px,
+      oklch(1 0 0 / 0.02) 3px
+    );
+  }
+  .text-terminal { color: var(--terminal); }
+  .glow-terminal {
+    text-shadow: 0 0 12px var(--terminal-glow);
+  }
+  .ring-terminal { box-shadow: 0 0 0 1px var(--terminal), 0 0 30px var(--terminal-glow); }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  .cursor-blink::after {
+    content: "▊";
+    display: inline-block;
+    margin-left: 4px;
+    color: var(--terminal);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes wink {
+    0%, 88%, 100% { transform: scaleY(1); }
+    90%, 96% { transform: scaleY(0.15); }
+  }
+  .wink-eye {
+    transform-origin: 50% 60%;
+    transform-box: fill-box;
+    animation: wink 3.5s ease-in-out infinite;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s ease-out both; }
+}
